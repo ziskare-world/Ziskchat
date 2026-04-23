@@ -88,7 +88,8 @@ data class ProjectMemberUiModel(
     val role: String,
     val branchName: String,
     val avatarSeed: String,
-    val progressNote: String
+    val progressNote: String,
+    val phoneNumber: String = ""
 )
 
 data class ProjectMemberUpdateUiModel(
@@ -99,6 +100,21 @@ data class ProjectMemberUpdateUiModel(
     val completedWork: List<String>,
     val time: String,
     val documents: List<ProjectDocumentUiModel> = emptyList()
+)
+
+data class ProjectGitHubFileUiModel(
+    val name: String,
+    val type: String,
+    val htmlUrl: String,
+    val sizeLabel: String
+)
+
+data class ProjectGitHubCommitUiModel(
+    val shaShort: String,
+    val message: String,
+    val author: String,
+    val dateLabel: String,
+    val htmlUrl: String
 )
 
 data class ProjectUiModel(
@@ -118,5 +134,16 @@ data class ProjectUiModel(
     val updates: List<ProjectMemberUpdateUiModel>,
     val documents: List<ProjectDocumentUiModel>,
     val githubRepoName: String,
-    val githubConnected: Boolean
+    val githubConnected: Boolean,
+    val githubUserLogin: String = "",
+    val githubRepoOwner: String = "",
+    val githubBranches: List<String> = emptyList(),
+    val githubRepoUrl: String = "",
+    val githubZipUrl: String = "",
+    val githubDescription: String = "",
+    val githubUpdatedAt: String = "",
+    val githubStars: Int = 0,
+    val githubOpenIssues: Int = 0,
+    val githubFiles: List<ProjectGitHubFileUiModel> = emptyList(),
+    val githubCommits: List<ProjectGitHubCommitUiModel> = emptyList()
 )

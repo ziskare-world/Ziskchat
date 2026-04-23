@@ -28,6 +28,7 @@ sealed class ZiskRoute(val route: String) {
         fun create(projectId: String) = "project/$projectId"
     }
     data object ProjectCreate : ZiskRoute("project_create")
+    data object ProjectsGitHubConnect : ZiskRoute("projects_github_connect")
     data object ProjectDocuments : ZiskRoute("project/{projectId}/documents") {
         fun create(projectId: String) = "project/$projectId/documents"
     }
@@ -36,6 +37,21 @@ sealed class ZiskRoute(val route: String) {
     }
     data object ProjectTimeline : ZiskRoute("project/{projectId}/timeline") {
         fun create(projectId: String) = "project/$projectId/timeline"
+    }
+    data object ProjectSettings : ZiskRoute("project/{projectId}/settings") {
+        fun create(projectId: String) = "project/$projectId/settings"
+    }
+    data object ProjectSettingsMembers : ZiskRoute("project/{projectId}/settings/members") {
+        fun create(projectId: String) = "project/$projectId/settings/members"
+    }
+    data object ProjectSettingsRepository : ZiskRoute("project/{projectId}/settings/repository") {
+        fun create(projectId: String) = "project/$projectId/settings/repository"
+    }
+    data object ProjectSettingsMore : ZiskRoute("project/{projectId}/settings/more") {
+        fun create(projectId: String) = "project/$projectId/settings/more"
+    }
+    data object ProjectGitHubConnect : ZiskRoute("project/{projectId}/github") {
+        fun create(projectId: String) = "project/$projectId/github"
     }
     data object CallMock : ZiskRoute("call/{callId}") {
         fun create(callId: String) = "call/$callId"

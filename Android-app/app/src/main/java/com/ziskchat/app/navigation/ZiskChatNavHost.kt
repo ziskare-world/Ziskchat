@@ -60,6 +60,13 @@ import com.ziskchat.app.feature.projects.ProjectCreateRoute
 import com.ziskchat.app.feature.projects.ProjectDocumentsRoute
 import com.ziskchat.app.feature.projects.ProjectMembersRoute
 import com.ziskchat.app.feature.projects.ProjectsRoute
+import com.ziskchat.app.feature.projects.ProjectGitHubConnectRoute
+import com.ziskchat.app.feature.projects.ProjectsGitHubConnectRoute
+import com.ziskchat.app.feature.projects.ProjectSettingsMembersRoute
+import com.ziskchat.app.feature.projects.ProjectSettingsMoreRoute
+import com.ziskchat.app.feature.projects.ProjectSettingsRepositoryRoute
+import com.ziskchat.app.feature.projects.ProjectSettingsRoute
+import com.ziskchat.app.feature.projects.ProjectTab
 import com.ziskchat.app.feature.projects.ProjectTimelineRoute
 import com.ziskchat.app.feature.settings.EditProfileRoute
 import com.ziskchat.app.feature.settings.SettingsRoute
@@ -166,9 +173,16 @@ fun ZiskChatNavHost(
             ProjectDetailRoute(
                 projectId = projectId,
                 onBack = { navController.popBackStack() },
-                onOpenDocuments = { navController.navigate(ZiskRoute.ProjectDocuments.create(it)) },
-                onOpenMembers = { navController.navigate(ZiskRoute.ProjectMembers.create(it)) },
-                onOpenTimeline = { navController.navigate(ZiskRoute.ProjectTimeline.create(it)) }
+                onSelectTab = { tab ->
+                    when (tab) {
+                        ProjectTab.OVERVIEW -> navController.navigate(ZiskRoute.ProjectDetail.create(projectId))
+                        ProjectTab.DOCUMENTS -> navController.navigate(ZiskRoute.ProjectDocuments.create(projectId))
+                        ProjectTab.MEMBERS -> navController.navigate(ZiskRoute.ProjectMembers.create(projectId))
+                        ProjectTab.TIMELINE -> navController.navigate(ZiskRoute.ProjectTimeline.create(projectId))
+                    }
+                },
+                onOpenGitHub = { navController.navigate(ZiskRoute.ProjectGitHubConnect.create(it)) },
+                onOpenSettings = { navController.navigate(ZiskRoute.ProjectSettings.create(it)) }
             )
         }
         composable(ZiskRoute.ProjectCreate.route) {
@@ -181,26 +195,113 @@ fun ZiskChatNavHost(
                 }
             )
         }
+        composable(ZiskRoute.ProjectsGitHubConnect.route) {
+            ProjectsGitHubConnectRoute(onBack = { navController.popBackStack() })
+        }
         composable(
             route = ZiskRoute.ProjectDocuments.route,
             arguments = listOf(navArgument("projectId") { defaultValue = "p1" })
         ) {
             val projectId = it.arguments?.getString("projectId").orEmpty()
-            ProjectDocumentsRoute(projectId = projectId, onBack = { navController.popBackStack() })
+            ProjectDocumentsRoute(
+                projectId = projectId,
+                onBack = { navController.popBackStack() },
+                onSelectTab = { tab ->
+                    when (tab) {
+                        ProjectTab.OVERVIEW -> navController.navigate(ZiskRoute.ProjectDetail.create(projectId))
+                        ProjectTab.DOCUMENTS -> navController.navigate(ZiskRoute.ProjectDocuments.create(projectId))
+                        ProjectTab.MEMBERS -> navController.navigate(ZiskRoute.ProjectMembers.create(projectId))
+                        ProjectTab.TIMELINE -> navController.navigate(ZiskRoute.ProjectTimeline.create(projectId))
+                    }
+                },
+                onOpenGitHub = { navController.navigate(ZiskRoute.ProjectGitHubConnect.create(it)) },
+                onOpenSettings = { navController.navigate(ZiskRoute.ProjectSettings.create(it)) }
+            )
         }
         composable(
             route = ZiskRoute.ProjectMembers.route,
             arguments = listOf(navArgument("projectId") { defaultValue = "p1" })
         ) {
             val projectId = it.arguments?.getString("projectId").orEmpty()
-            ProjectMembersRoute(projectId = projectId, onBack = { navController.popBackStack() })
+            ProjectMembersRoute(
+                projectId = projectId,
+                onBack = { navController.popBackStack() },
+                onSelectTab = { tab ->
+                    when (tab) {
+                        ProjectTab.OVERVIEW -> navController.navigate(ZiskRoute.ProjectDetail.create(projectId))
+                        ProjectTab.DOCUMENTS -> navController.navigate(ZiskRoute.ProjectDocuments.create(projectId))
+                        ProjectTab.MEMBERS -> navController.navigate(ZiskRoute.ProjectMembers.create(projectId))
+                        ProjectTab.TIMELINE -> navController.navigate(ZiskRoute.ProjectTimeline.create(projectId))
+                    }
+                },
+                onOpenGitHub = { navController.navigate(ZiskRoute.ProjectGitHubConnect.create(it)) },
+                onOpenSettings = { navController.navigate(ZiskRoute.ProjectSettings.create(it)) }
+            )
         }
         composable(
             route = ZiskRoute.ProjectTimeline.route,
             arguments = listOf(navArgument("projectId") { defaultValue = "p1" })
         ) {
             val projectId = it.arguments?.getString("projectId").orEmpty()
-            ProjectTimelineRoute(projectId = projectId, onBack = { navController.popBackStack() })
+            ProjectTimelineRoute(
+                projectId = projectId,
+                onBack = { navController.popBackStack() },
+                onSelectTab = { tab ->
+                    when (tab) {
+                        ProjectTab.OVERVIEW -> navController.navigate(ZiskRoute.ProjectDetail.create(projectId))
+                        ProjectTab.DOCUMENTS -> navController.navigate(ZiskRoute.ProjectDocuments.create(projectId))
+                        ProjectTab.MEMBERS -> navController.navigate(ZiskRoute.ProjectMembers.create(projectId))
+                        ProjectTab.TIMELINE -> navController.navigate(ZiskRoute.ProjectTimeline.create(projectId))
+                    }
+                },
+                onOpenGitHub = { navController.navigate(ZiskRoute.ProjectGitHubConnect.create(it)) },
+                onOpenSettings = { navController.navigate(ZiskRoute.ProjectSettings.create(it)) }
+            )
+        }
+        composable(
+            route = ZiskRoute.ProjectSettings.route,
+            arguments = listOf(navArgument("projectId") { defaultValue = "p1" })
+        ) {
+            val projectId = it.arguments?.getString("projectId").orEmpty()
+            ProjectSettingsRoute(
+                projectId = projectId,
+                onBack = { navController.popBackStack() },
+                onOpenMembers = { navController.navigate(ZiskRoute.ProjectSettingsMembers.create(projectId)) },
+                onOpenRepository = { navController.navigate(ZiskRoute.ProjectSettingsRepository.create(projectId)) },
+                onOpenMore = { navController.navigate(ZiskRoute.ProjectSettingsMore.create(projectId)) }
+            )
+        }
+        composable(
+            route = ZiskRoute.ProjectSettingsMembers.route,
+            arguments = listOf(navArgument("projectId") { defaultValue = "p1" })
+        ) {
+            val projectId = it.arguments?.getString("projectId").orEmpty()
+            ProjectSettingsMembersRoute(projectId = projectId, onBack = { navController.popBackStack() })
+        }
+        composable(
+            route = ZiskRoute.ProjectSettingsRepository.route,
+            arguments = listOf(navArgument("projectId") { defaultValue = "p1" })
+        ) {
+            val projectId = it.arguments?.getString("projectId").orEmpty()
+            ProjectSettingsRepositoryRoute(projectId = projectId, onBack = { navController.popBackStack() })
+        }
+        composable(
+            route = ZiskRoute.ProjectSettingsMore.route,
+            arguments = listOf(navArgument("projectId") { defaultValue = "p1" })
+        ) {
+            val projectId = it.arguments?.getString("projectId").orEmpty()
+            ProjectSettingsMoreRoute(projectId = projectId, onBack = { navController.popBackStack() })
+        }
+        composable(
+            route = ZiskRoute.ProjectGitHubConnect.route,
+            arguments = listOf(navArgument("projectId") { defaultValue = "p1" })
+        ) {
+            val projectId = it.arguments?.getString("projectId").orEmpty()
+            ProjectGitHubConnectRoute(
+                projectId = projectId,
+                onBack = { navController.popBackStack() },
+                onLinked = { navController.popBackStack() }
+            )
         }
         composable(
             route = ZiskRoute.GroupDetail.route,
@@ -294,7 +395,8 @@ private fun MainShell(rootNavController: NavHostController) {
             composable(ZiskRoute.Projects.route) {
                 ProjectsRoute(
                     onOpenProject = { rootNavController.navigate(ZiskRoute.ProjectDetail.create(it)) },
-                    onCreateProject = { rootNavController.navigate(ZiskRoute.ProjectCreate.route) }
+                    onCreateProject = { rootNavController.navigate(ZiskRoute.ProjectCreate.route) },
+                    onOpenGitHub = { rootNavController.navigate(ZiskRoute.ProjectsGitHubConnect.route) }
                 )
             }
             composable(ZiskRoute.Calls.route) {

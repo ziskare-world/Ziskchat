@@ -34,6 +34,7 @@ interface ProjectRepository {
     fun projects(): List<ProjectUiModel>
     fun projectById(id: String): ProjectUiModel?
     fun addProject(project: ProjectUiModel): String
+    fun updateProject(project: ProjectUiModel)
 }
 
 object MockChatRepository : ChatRepository {
@@ -259,16 +260,16 @@ object MockProjectRepository : ProjectRepository {
     )
 
     private val launchMembers = listOf(
-        ProjectMemberUiModel("pm1", "Aarav Mehta", "Product Designer", "feature/launch-ux", "AM", "Finished the final visual polish."),
-        ProjectMemberUiModel("pm2", "Sara Kim", "Content Strategist", "feature/release-copy", "SK", "Updated FAQ and launch messaging."),
-        ProjectMemberUiModel("pm3", "Noah Rivera", "Android Developer", "feature/project-dashboard", "NR", "Preparing delivery handoff screens."),
-        ProjectMemberUiModel("pm4", "You", "Project Admin", "main", "ME", "Reviewing the final checklist and progress.")
+        ProjectMemberUiModel("pm1", "Aarav Mehta", "Product Designer", "feature/launch-ux", "AM", "Finished the final visual polish.", "+91 98765 12001"),
+        ProjectMemberUiModel("pm2", "Sara Kim", "Content Strategist", "feature/release-copy", "SK", "Updated FAQ and launch messaging.", "+91 98765 12002"),
+        ProjectMemberUiModel("pm3", "Noah Rivera", "Android Developer", "feature/project-dashboard", "NR", "Preparing delivery handoff screens.", "+91 98765 12003"),
+        ProjectMemberUiModel("pm4", "You", "Project Admin", "main", "ME", "Reviewing the final checklist and progress.", "+91 98765 12000")
     )
 
     private val portalMembers = listOf(
-        ProjectMemberUiModel("pm5", "Noah Rivera", "Frontend Engineer", "feature/progress-timeline", "NR", "Working on the timeline card and graph."),
-        ProjectMemberUiModel("pm6", "Mina Patel", "Product Designer", "feature/document-vault", "MP", "Refining cards and restricted-access UI."),
-        ProjectMemberUiModel("pm7", "You", "Project Admin", "main", "ME", "Tracking milestones and member roles.")
+        ProjectMemberUiModel("pm5", "Noah Rivera", "Frontend Engineer", "feature/progress-timeline", "NR", "Working on the timeline card and graph.", "+91 98765 12003"),
+        ProjectMemberUiModel("pm6", "Mina Patel", "Product Designer", "feature/document-vault", "MP", "Refining cards and restricted-access UI.", "+91 98765 12004"),
+        ProjectMemberUiModel("pm7", "You", "Project Admin", "main", "ME", "Tracking milestones and member roles.", "+91 98765 12000")
     )
 
     private val launchProject = ProjectUiModel(
@@ -311,7 +312,10 @@ object MockProjectRepository : ProjectRepository {
         ),
         documents = sprintDocs,
         githubRepoName = "ziskchat/launch-readiness",
-        githubConnected = false
+        githubConnected = false,
+        githubUserLogin = "",
+        githubRepoOwner = "ziskchat",
+        githubBranches = listOf("main", "feature/launch-ux", "feature/release-copy", "release/final")
     )
 
     private val portalProject = ProjectUiModel(
@@ -362,7 +366,10 @@ object MockProjectRepository : ProjectRepository {
             )
         ),
         githubRepoName = "ziskchat/internal-portal",
-        githubConnected = false
+        githubConnected = false,
+        githubUserLogin = "",
+        githubRepoOwner = "ziskchat",
+        githubBranches = listOf("main", "feature/progress-timeline", "feature/document-vault")
     )
 
     private val projects = mutableStateListOf(launchProject, portalProject)
@@ -373,5 +380,11 @@ object MockProjectRepository : ProjectRepository {
         val id = "p${nextProjectId++}"
         projects.add(0, project.copy(id = id))
         return id
+    }
+    override fun updateProject(project: ProjectUiModel) {
+        val index = projects.indexOfFirst { it.id == project.id }
+        if (index >= 0) {
+            projects[index] = project
+        }
     }
 }
